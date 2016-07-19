@@ -805,7 +805,7 @@ $(CNTK_CORE_BS): $(SOURCEDIR)/CNTK/BrainScript/CNTKCoreLib/CNTK.core.bs
 
 # use system pre-installed Boost libraries
 # Todo: use our own version of boost libraries 
-BOOSTLIB_PATH = /usr/lib/x86_64-linux-gnu
+BOOSTLIB_PATH = /usr/local/lib
 BOOSTLIBS := boost_unit_test_framework boost_filesystem boost_system
 
 UNITTEST_EVAL_SRC = \
