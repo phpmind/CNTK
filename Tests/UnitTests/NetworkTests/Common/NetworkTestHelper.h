@@ -34,7 +34,11 @@ struct DataFixture
         m_parentPath = boost::filesystem::canonical(path.parent_path()).generic_string();
         fprintf(stderr, "Executable path: %s\n", m_parentPath.c_str());
 
+#ifdef _WIN32
         m_testDataPath = m_parentPath + "/../../../Tests/UnitTests/NetworkTests";
+#else
+        m_testDataPath = m_parentPath + "/../../../../Tests/UnitTests/NetworkTests";
+#endif
         boost::filesystem::path absTestPath(m_testDataPath);
         absTestPath = boost::filesystem::canonical(absTestPath);
         m_testDataPath = absTestPath.generic_string();
