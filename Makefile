@@ -816,8 +816,8 @@ UNITTEST_EVAL_OBJ := $(patsubst %.cpp, $(OBJDIR)/%.o, $(UNITTEST_EVAL_SRC))
 
 UNITTEST_EVAL := $(BINDIR)/evaltests
 # Temporarily not build unit tests as the docker image does not include boost.
-#ALL += $(UNITTEST_EVAL)
-#SRC += $(UNITTEST_EVAL_SRC)
+ALL += $(UNITTEST_EVAL)
+SRC += $(UNITTEST_EVAL_SRC)
 
 $(UNITTEST_EVAL) : $(UNITTEST_EVAL_OBJ) | $(EVAL_LIB) $(CNTKMATH_LIB)
 	@echo $(SEPARATOR)
@@ -842,14 +842,14 @@ UNITTEST_READER_OBJ := $(patsubst %.cpp, $(OBJDIR)/%.o, $(UNITTEST_READER_SRC))
 
 UNITTEST_READER := $(BINDIR)/readertests
 # Temporarily not build unit tests as the docker image does not include boost.
-#ALL += $(UNITTEST_READER)
-#SRC += $(UNITTEST_READER_SRC)
+ALL += $(UNITTEST_READER)
+SRC += $(UNITTEST_READER_SRC)
 
 $(UNITTEST_READER): $(UNITTEST_READER_OBJ) | $(HTKMLFREADER) $(HTKDESERIALIZERS) $(UCIFASTREADER) $(COMPOSITEDATAREADER) $(IMAGEREADER) $(CNTKMATH_LIB)
 	@echo $(SEPARATOR)
 	@mkdir -p $(dir $@)
 	@echo building $@ for $(ARCH) with build type $(BUILDTYPE)
-	$(CXX) $(LDFLAGS) $(patsubst %,-L%, $(LIBDIR) $(BOOSTLIB_PATH)) $(patsubst %, $(RPATH)%, $(LIBDIR) $(BOOSTLIB_PATH)) -o $@ $^ $(patsubst %, -l%, $(BOOSTLIBS))  -l$(CNTKMATH) 
+	$(CXX) $(LDFLAGS) $(patsubst %,-L%, $(LIBDIR) $(BOOSTLIB_PATH)) $(patsubst %, $(RPATH)%, $(LIBDIR) $(BOOSTLIB_PATH)) -o $@ $^ $(patsubst %, -l%, $(BOOSTLIBS)) -l$(CNTKMATH) -ldl 
 
 UNITTEST_NETWORK_SRC = \
 	$(SOURCEDIR)/../Tests/UnitTests/NetworkTests/OperatorEvaluation.cpp \
@@ -876,8 +876,8 @@ UNITTEST_NETWORK_OBJ := $(patsubst %.cu, $(OBJDIR)/%.o, $(patsubst %.cpp, $(OBJD
 
 UNITTEST_NETWORK := $(BINDIR)/networktests
 # Temporarily not build unit tests as the docker image does not include boost.
-#ALL += $(UNITTEST_NETWORK)
-#SRC += $(UNITTEST_NETWORK_SRC)
+ALL += $(UNITTEST_NETWORK)
+SRC += $(UNITTEST_NETWORK_SRC)
 
 $(UNITTEST_NETWORK): $(UNITTEST_NETWORK_OBJ) | $(CNTKMATH_LIB) $(CNTKTEXTFORMATREADER)
 	@echo $(SEPARATOR)
@@ -908,14 +908,14 @@ UNITTEST_MATH_OBJ := $(patsubst %.cpp, $(OBJDIR)/%.o, $(UNITTEST_MATH_SRC))
 
 UNITTEST_MATH := $(BINDIR)/mathtests
 # Temporarily not build unit tests as the docker image does not include boost.
-#ALL += $(UNITTEST_MATH)
-#SRC += $(UNITTEST_MATH_SRC)
+ALL += $(UNITTEST_MATH)
+SRC += $(UNITTEST_MATH_SRC)
 
 $(UNITTEST_MATH): $(UNITTEST_MATH_OBJ) | $(CNTKMATH_LIB) 
 	@echo $(SEPARATOR)
 	@mkdir -p $(dir $@)
 	@echo building $@ for $(ARCH) with build type $(BUILDTYPE)
-	$(CXX) $(LDFLAGS) $(patsubst %,-L%, $(LIBDIR) $(LIBPATH) $(NVMLLIBPATH) $(BOOSTLIB_PATH)) $(patsubst %, $(RPATH)%, $(LIBDIR) $(LIBPATH) $(BOOSTLIB_PATH)) -o $@ $^ $(patsubst %, -l%, $(BOOSTLIBS)) $(LIBS) -l$(CNTKMATH) -liomp5
+	$(CXX) $(LDFLAGS) $(patsubst %,-L%, $(LIBDIR) $(LIBPATH) $(NVMLLIBPATH) $(BOOSTLIB_PATH)) $(patsubst %, $(RPATH)%, $(LIBDIR) $(LIBPATH) $(BOOSTLIB_PATH)) -o $@ $^ $(patsubst %, -l%, $(BOOSTLIBS)) $(LIBS) -l$(CNTKMATH) -ldl -fopenmp
 
 unittests: $(UNITTEST_EVAL) $(UNITTEST_READER) $(UNITTEST_NETWORK) $(UNITTEST_MATH)
 
